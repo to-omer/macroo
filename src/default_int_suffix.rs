@@ -63,7 +63,7 @@ impl DefaultIntSuffixVisitor {
         let s = lit.to_string();
         let mut b = s.as_bytes();
         match (
-            b.get(0).cloned().unwrap_or_default(),
+            b.first().cloned().unwrap_or_default(),
             b.get(1).cloned().unwrap_or_default(),
         ) {
             (b'0', b'x') => b = &b[2..],

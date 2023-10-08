@@ -9,9 +9,11 @@ add suffix to integet literal without suffix
 # Example
 ```
 #[macroo::default_int_suffix(u64)]
-fn main() {
+fn run() {
     assert_eq!((!0).to_string(), "18446744073709551615");
 }
+
+run();
 ```
 */
 #[proc_macro_attribute]
@@ -34,11 +36,13 @@ impl std::ops::AddAssign for I {
 }
 
 #[macroo::right_first_assign]
-fn main() {
+fn run() {
     let mut a = vec![I(1)];
     a[0] += a[0];
     assert_eq!(a[0], I(2));
 }
+
+run();
 ```
 */
 #[proc_macro_attribute]
