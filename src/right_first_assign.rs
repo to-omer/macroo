@@ -1,9 +1,11 @@
 use proc_macro::TokenStream;
+use proc_macro2::Span;
 use quote::quote;
+use rand::{thread_rng, Rng};
 use syn::{
     parse_macro_input, parse_quote,
     visit_mut::{self, VisitMut},
-    BinOp, Expr, ExprBinary, Item,
+    BinOp, Expr, ExprBinary, Ident, Item,
 };
 
 struct RightFirstAssignVisitor;
@@ -33,9 +35,15 @@ impl VisitMut for RightFirstAssignVisitor {
                         | BinOp::ShrAssign(_)
                 )
             {
+                let mut rng = thread_rng();
+                let name = format!(
+                    "__macroo_right_first_assign_ident_{:018}",
+                    rng.gen_range(0..10u64.pow(18))
+                );
+                let ident = Ident::new(&name, Span::call_site());
                 let e: Expr = parse_quote!({
-                    let x = #right;
-                    #left #op x;
+                    let #ident = #right;
+                    #left #op #ident;
                 });
                 *i = e;
             }
