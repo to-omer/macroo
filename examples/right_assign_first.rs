@@ -10,12 +10,16 @@ impl std::ops::AddAssign for I {
 }
 
 #[macroo::right_first_assign]
-fn run(x: i32) {
-    let mut a = vec![I(x)];
+fn main() {
+    let mut a = vec![I(1)];
     a[0] += a[0];
-    assert_eq!(a[0], I(2));
+    assert_eq!(a, vec![I(2)]);
 }
 
+/*
 fn main() {
-    run(1);
+    let mut a = vec![I(1)];
+    a[0] += a[0]; // error[E0502]: cannot borrow `a` as immutable because it is also borrowed as mutable
+    assert_eq!(a, vec![I(2)]);
 }
+*/

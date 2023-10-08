@@ -39,10 +39,18 @@ impl std::ops::AddAssign for I {
 fn run() {
     let mut a = vec![I(1)];
     a[0] += a[0];
-    assert_eq!(a[0], I(2));
+    assert_eq!(a, vec![I(2)]);
 }
 
 run();
+
+/*
+fn run() {
+    let mut a = vec![I(1)];
+    a[0] += a[0]; // error[E0502]: cannot borrow `a` as immutable because it is also borrowed as mutable
+    assert_eq!(a, vec![I(2)]);
+}
+*/
 ```
 */
 #[proc_macro_attribute]
