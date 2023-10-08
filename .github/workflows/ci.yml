@@ -22,8 +22,25 @@ jobs:
     - run: cargo test --no-fail-fast
     - run: cargo doc --no-deps
 
-    - uses: peaceiris/actions-gh-pages@v3
-      if: github.ref_name == 'master'
+    - run: |
+        chmod -c -R +rX "./target/doc/" | while read line; do
+          echo "::warning title=Invalid file permissions automatically fixed::$line"
+        done
+    - uses: actions/upload-pages-artifact@v2
       with:
-        personal_token: ${{ secrets.GITHUB_TOKEN  }}
-        publish_dir: ./target/doc
+        path: ./target/doc
+
+  deploy:
+    if: github.ref_name == 'master'
+    name: Deploy
+    needs: ci
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/deploy-pages@v2
+        id: deployment
