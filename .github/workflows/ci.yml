@@ -1,0 +1,29 @@
+name: CI
+
+on: push
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        components: rustfmt, clippy
+    - uses: Swatinem/rust-cache@v2
+
+    - run: cargo fmt --all -- --check
+    - run: cargo clippy -- -Dwarnings
+    - run: cargo build
+    - run: cargo test --no-fail-fast
+    - run: cargo doc --no-deps
+
+    - uses: peaceiris/actions-gh-pages@v3
+      if: github.ref_name == 'master'
+      with:
+        personal_token: ${{ secrets.GITHUB_TOKEN  }}
+        publish_dir: ./target/doc
