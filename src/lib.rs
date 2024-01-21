@@ -2,6 +2,7 @@ use proc_macro::TokenStream;
 
 mod default_int_suffix;
 mod right_first_assign;
+mod whitespace;
 
 /**
 add suffix to integet literal without suffix
@@ -56,4 +57,9 @@ fn run() {
 #[proc_macro_attribute]
 pub fn right_first_assign(attr: TokenStream, item: TokenStream) -> TokenStream {
     right_first_assign::right_first_assign(attr, item)
+}
+
+#[proc_macro_attribute]
+pub fn whitespace(attr: TokenStream, item: TokenStream) -> TokenStream {
+    whitespace::whitespace(attr, item)
 }
