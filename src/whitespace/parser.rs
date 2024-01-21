@@ -6,6 +6,7 @@ use std::{
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 enum Token {
+    #[allow(clippy::tabs_in_doc_comments)]
     /// r#"	"#
     Tab = b'\t' as _,
     LineFeed = b'\n' as _,
@@ -23,8 +24,10 @@ impl Token {
     }
 }
 
+type FromCharFn = fn(char) -> Option<Token>;
+
 pub struct Parser<'a> {
-    iter: Peekable<FlatMap<Chars<'a>, Option<Token>, fn(char) -> Option<Token>>>,
+    iter: Peekable<FlatMap<Chars<'a>, Option<Token>, FromCharFn>>,
 }
 
 impl Parser<'_> {
@@ -32,7 +35,7 @@ impl Parser<'_> {
         Parser {
             iter: buf
                 .chars()
-                .flat_map::<_, fn(char) -> Option<Token>>(Token::from_char)
+                .flat_map::<_, FromCharFn>(Token::from_char)
                 .peekable(),
         }
     }

@@ -109,7 +109,7 @@ impl ToTokens for Arith {
 impl ToTokens for Label {
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
         let mut label = String::new();
-        label.push_str("W");
+        label.push('W');
         for &bit in &self.0 {
             label.push(if bit { '1' } else { '0' });
         }
